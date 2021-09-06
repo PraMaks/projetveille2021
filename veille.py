@@ -7,6 +7,13 @@ def afficher_menu():
     print("Q: Quitter l'application")
 
 
+def afficher_listes():
+    print("Voici la liste des categories de cartes disponibles: ")
+    for key in category_dict:
+        print("     - {}".format(key))
+    print("----------")
+
+
 def afficher_listes_dictionnaire():
     afficher_listes()
 
@@ -18,22 +25,17 @@ def afficher_listes_dictionnaire():
         print("Clé invalide! Retour au menu")
 
 
-def afficher_listes():
-    print("Voici la liste des categories de cartes disponibles: ")
-    for key in category_dict:
-        print("     - {}".format(key))
-    print("----------")
-
-
 def ajouter_carte_dans_liste():
     afficher_listes()
 
-    input_menu_read = input("Quel liste voulez vous afficher? ")
+    input_story = input("Entrez votre story à ajouter: ")
+
+    input_menu_read = input("Dans quelle liste voulez vous ajouter la story? ")
     try:
-        for story in category_dict[input_menu_read]:
-            print("     - {}".format(story))
+        category_dict[input_menu_read].append(input_story)
     except KeyError:
         print("Clé invalide! Retour au menu")
+
 
 todo_list = ["Tache2", "Tache3", "Tache4"]
 inprogress_list = ["Tache1", "Tache5"]
@@ -48,13 +50,13 @@ while True:
     input_menu = input_menu.upper()
 
     if input_menu[0] == "A":
-        print("Ajout")
+        ajouter_carte_dans_liste()
 
     elif input_menu[0] == "S":
         print("Supprimer")
 
     elif input_menu[0] == "L":
-        afficher_listes_dictionnaires()
+        afficher_listes_dictionnaire()
 
     elif input_menu[0] == "N":
         print("Nouveau")
