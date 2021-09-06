@@ -7,6 +7,34 @@ def afficher_menu():
     print("Q: Quitter l'application")
 
 
+def afficher_listes_dictionnaire():
+    afficher_listes()
+
+    input_menu_read = input("Quel liste voulez vous afficher? ")
+    try:
+        for story in category_dict[input_menu_read]:
+            print("     - {}".format(story))
+    except KeyError:
+        print("Clé invalide! Retour au menu")
+
+
+def afficher_listes():
+    print("Voici la liste des categories de cartes disponibles: ")
+    for key in category_dict:
+        print("     - {}".format(key))
+    print("----------")
+
+
+def ajouter_carte_dans_liste():
+    afficher_listes()
+
+    input_menu_read = input("Quel liste voulez vous afficher? ")
+    try:
+        for story in category_dict[input_menu_read]:
+            print("     - {}".format(story))
+    except KeyError:
+        print("Clé invalide! Retour au menu")
+
 todo_list = ["Tache2", "Tache3", "Tache4"]
 inprogress_list = ["Tache1", "Tache5"]
 done_list = ["Tache0", "Tache6"]
@@ -16,25 +44,32 @@ print("Lancement de l'application...")
 while True:
     afficher_menu()
 
-    inputMenu = input("Entrez une lettre: ")
-    inputMenu = inputMenu.upper()
+    input_menu = input("Entrez une lettre: ")
+    input_menu = input_menu.upper()
 
-    if inputMenu[0] == "A":
+    if input_menu[0] == "A":
         print("Ajout")
-    elif inputMenu[0] == "S":
+
+    elif input_menu[0] == "S":
         print("Supprimer")
-    elif inputMenu[0] == "L":
-        print("Lire")
-    elif inputMenu[0] == "N":
+
+    elif input_menu[0] == "L":
+        afficher_listes_dictionnaires()
+
+    elif input_menu[0] == "N":
         print("Nouveau")
-    elif inputMenu[0] == "M":
+
+    elif input_menu[0] == "M":
         print("Modification")
-    elif inputMenu[0] == "Q":
+
+    elif input_menu[0] == "Q":
         break
+
     else:
         print("Choix invalide! Réesayez")
-    print("\n")
+    print()
 
-for i in category_dict["TODO"]:
-    print(i)
-print("Fermeture")
+# for i in category_dict["TODO"]:
+    # print(i)
+
+print("Fermeture de l'application...")
