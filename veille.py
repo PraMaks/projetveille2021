@@ -6,9 +6,16 @@ def afficher_menu():
     print("M: Modifier le contenu d'une carte")
     print("Q: Quitter l'application")
 
-print("Lancement de l'application")
+
+todo_list = ["Tache2", "Tache3", "Tache4"]
+inprogress_list = ["Tache1", "Tache5"]
+done_list = ["Tache0", "Tache6"]
+category_dict = {"TODO": todo_list, "INPROGRESS": inprogress_list, "DONE": done_list}
+
+print("Lancement de l'application...")
 while True:
     afficher_menu()
+
     inputMenu = input("Entrez une lettre: ")
     inputMenu = inputMenu.upper()
 
@@ -22,7 +29,12 @@ while True:
         print("Nouveau")
     elif inputMenu[0] == "M":
         print("Modification")
+    elif inputMenu[0] == "Q":
+        break
+    else:
+        print("Choix invalide! Réesayez")
+    print("\n")
 
-    print(inputMenu)
-
-    break
+for i in category_dict["TODO"]:
+    print(i)
+print("Fermeture")
