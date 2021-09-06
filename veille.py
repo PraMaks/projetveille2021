@@ -18,14 +18,20 @@ def afficher_listes_dictionnaire():
     afficher_listes()
 
     input_menu_read = input("Quel liste voulez vous afficher? ")
+    afficher_contenu_liste(input_menu_read)
+
+
+def afficher_contenu_liste(input_menu_read):
     try:
+        counter = 0
         for story in category_dict[input_menu_read]:
-            print("     - {}".format(story))
+            print("     - {} ({})".format(story, counter))
+            counter += 1
     except KeyError:
         print("Clé invalide! Retour au menu")
 
 
-def ajouter_carte_dans_liste():
+def ajouter_story_dans_liste():
     afficher_listes()
 
     input_story = input("Entrez votre story à ajouter: ")
@@ -34,7 +40,31 @@ def ajouter_carte_dans_liste():
     try:
         category_dict[input_menu_read].append(input_story)
     except KeyError:
-        print("Clé invalide! Retour au menu")
+        print("Clé invalide! Retour au menu....")
+
+
+def supprimer_story_dans_liste():
+    afficher_listes()
+
+    input_menu_delete = input("Dans quelle liste voulez vous supprimer la story: ")
+    afficher_contenu_liste(input_menu_delete)
+
+    while True:
+        input_story_delete = input("Entrez le numéro de la carte que vous voulez supprimer: ")
+
+        try:
+            input_int = int(input_story_delete)
+            try:
+                category_dict[input_menu_delete].pop(input_int)
+                print("Carte supprimée!")
+                break
+
+            except IndexError:
+                print("Erreur! Retour au menu...")
+                break
+
+        except ValueError:
+            print("Cela n'est pas un nombre")
 
 
 todo_list = ["Tache2", "Tache3", "Tache4"]
@@ -50,10 +80,10 @@ while True:
     input_menu = input_menu.upper()
 
     if input_menu[0] == "A":
-        ajouter_carte_dans_liste()
+        ajouter_story_dans_liste()
 
     elif input_menu[0] == "S":
-        print("Supprimer")
+        supprimer_story_dans_liste()
 
     elif input_menu[0] == "L":
         afficher_listes_dictionnaire()
