@@ -6,6 +6,7 @@ def afficher_menu():
     print("C: Modifier le nom d'une catégorie de cartes")
     print("D: Supprimer une catégorie de cartes")
     print("S: Supprimer une carte")
+    print("F: Déplacer une carte dans une autre liste")
     print("Q: Quitter l'application")
 
 
@@ -35,7 +36,7 @@ def afficher_contenu_liste(input_menu_read):
         else:
             print("La liste est vide!")
     except KeyError:
-        print("Clé invalide! Retour au menu")
+        print("Clé invalide!")
 
 
 def ajouter_story_dans_liste():
@@ -143,6 +144,21 @@ def modifier_nom_categorie_liste():
         print("Il n'y a pas de listes!")
 
 
+def deplacer_carte_dans_autre_liste():
+    if category_dict:
+        afficher_listes()
+        input_liste_de = input("Dans quelle liste se trouve la carte à déplacer?: ")
+        input_liste_a = input("Dans quelle liste faut déplacer la carte?: ")
+        try:
+            afficher_contenu_liste(input_liste_de)
+            input_index_carte = int(input("Quel est le nombre de la carte à deplacer?: "))
+            category_dict[input_liste_a].append(category_dict[input_liste_de].pop(input_index_carte))
+        except KeyError:
+            print("Le nom de la liste entré n'existe pas!!!")
+    else:
+        print("Il n'y a pas de listes")
+
+
 todo_list = ["Tache2", "Tache3", "Tache4"]
 inprogress_list = ["Tache1", "Tache5"]
 done_list = ["Tache0", "Tache6"]
@@ -175,6 +191,9 @@ while True:
 
     elif input_menu[0] == "D":
         supprimer_liste()
+
+    elif input_menu[0] == "F":
+        deplacer_carte_dans_autre_liste()
 
     elif input_menu[0] == "Q":
         break
