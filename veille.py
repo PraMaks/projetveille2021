@@ -1,11 +1,11 @@
 def afficher_menu():
     print("A: Ajouter une nouvelle carte")
-    print("S: Supprimer une carte")
-    print("L: Lire une carte / afficher les informations")
     print("N: Ajouter une nouvelle catégorie de cartes")
+    print("L: Lire une carte / afficher les informations")
     print("M: Modifier le contenu d'une carte")
     print("C: Modifier le nom d'une catégorie de cartes")
     print("D: Supprimer une catégorie de cartes")
+    print("S: Supprimer une carte")
     print("Q: Quitter l'application")
 
 
@@ -128,6 +128,21 @@ def supprimer_liste():
         print("Il n'y a pas de listes")
 
 
+def modifier_nom_categorie_liste():
+    if category_dict:
+        afficher_listes()
+        liste_nom_vieux = input("Entrez le nom de catégorie à changer: ")
+        liste_nom_nouveau = input("Entrez le nouveau nom de catégorie: ")
+        try:
+            # En Python on n'a pas besoin de garder la donnée effacée en mémoire contrairement à Java
+            category_dict[liste_nom_nouveau] = category_dict.pop(liste_nom_vieux)
+            print("Nom modifiée!")
+        except KeyError:
+            print("Le nom de la liste entré n'existe pas!!!")
+    else:
+        print("Il n'y a pas de listes!")
+
+
 todo_list = ["Tache2", "Tache3", "Tache4"]
 inprogress_list = ["Tache1", "Tache5"]
 done_list = ["Tache0", "Tache6"]
@@ -156,7 +171,7 @@ while True:
         modifier_story_dans_liste()
 
     elif input_menu[0] == "C":
-        print("Categorie")
+        modifier_nom_categorie_liste()
 
     elif input_menu[0] == "D":
         supprimer_liste()
@@ -167,8 +182,5 @@ while True:
     else:
         print("Choix invalide! Réesayez")
     print()
-
-# for i in category_dict["TODO"]:
-    # print(i)
 
 print("Fermeture de l'application...")
