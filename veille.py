@@ -39,6 +39,7 @@ def ajouter_story_dans_liste():
     input_menu_read = input("Dans quelle liste voulez vous ajouter la story? ")
     try:
         category_dict[input_menu_read].append(input_story)
+        print("Story ajoutée!!!")
     except KeyError:
         print("Clé invalide! Retour au menu....")
 
@@ -50,13 +51,38 @@ def supprimer_story_dans_liste():
     afficher_contenu_liste(input_menu_delete)
 
     while True:
-        input_story_delete = input("Entrez le numéro de la carte que vous voulez supprimer: ")
+        input_story_delete = input("Entrez le numéro de la story que vous voulez supprimer: ")
 
         try:
             input_int = int(input_story_delete)
             try:
                 category_dict[input_menu_delete].pop(input_int)
-                print("Carte supprimée!")
+                print("Story supprimée!!!")
+                break
+
+            except IndexError:
+                print("Erreur! Retour au menu...")
+                break
+
+        except ValueError:
+            print("Cela n'est pas un nombre")
+
+
+def modifier_story_dans_liste():
+    afficher_listes()
+
+    input_menu_modif = input("Dans quelle liste se trouve la story à modifier: ")
+    afficher_contenu_liste(input_menu_modif)
+
+    while True:
+        input_story_modif = input("Entrez le numéro de la story que vous voulez modifier: ")
+        input_story_content = input("Entrez le nouveau texte à mettre dans la story: ")
+
+        try:
+            input_int = int(input_story_modif)
+            try:
+                category_dict[input_menu_modif][input_int] = input_story_content
+                print("Story modifiée!!!")
                 break
 
             except IndexError:
@@ -92,7 +118,7 @@ while True:
         print("Nouveau")
 
     elif input_menu[0] == "M":
-        print("Modification")
+        modifier_story_dans_liste()
 
     elif input_menu[0] == "Q":
         break
