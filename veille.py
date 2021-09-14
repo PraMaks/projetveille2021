@@ -7,6 +7,7 @@ def afficher_menu():
     print("D: Supprimer une catégorie de cartes")
     print("S: Supprimer une carte")
     print("F: Déplacer une carte dans une autre liste")
+    print("X: Supprimer toutes les listes et cartes")
     print("Q: Quitter l'application")
 
 
@@ -159,6 +160,15 @@ def deplacer_carte_dans_autre_liste():
         print("Il n'y a pas de listes")
 
 
+def effacer_tout():
+    choix = input("Êtes-vous certain de tout effacer(O/N): ")
+    if choix == "O":
+        category_dict.clear()
+        print("Tout est effacé...")
+    else:
+        print("Annulation d'effacement du dictionnaire des données. Retour au menu...")
+
+
 todo_list = ["Tache2", "Tache3", "Tache4"]
 inprogress_list = ["Tache1", "Tache5"]
 done_list = ["Tache0", "Tache6"]
@@ -194,6 +204,9 @@ while True:
 
     elif input_menu[0] == "F":
         deplacer_carte_dans_autre_liste()
+
+    elif input_menu[0] == "X":
+        effacer_tout()
 
     elif input_menu[0] == "Q":
         break
