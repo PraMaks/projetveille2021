@@ -1,3 +1,6 @@
+import json
+
+
 def afficher_menu():
     print("A: Ajouter une nouvelle carte")
     print("N: Ajouter une nouvelle catégorie de cartes")
@@ -8,6 +11,7 @@ def afficher_menu():
     print("S: Supprimer une carte")
     print("F: Déplacer une carte dans une autre liste")
     print("X: Supprimer toutes les listes et cartes")
+    print("I: Sauvegarder les cartes")
     print("Q: Quitter l'application")
 
 
@@ -154,6 +158,7 @@ def deplacer_carte_dans_autre_liste():
             afficher_contenu_liste(input_liste_de)
             input_index_carte = int(input("Quel est le nombre de la carte à deplacer?: "))
             category_dict[input_liste_a].append(category_dict[input_liste_de].pop(input_index_carte))
+            print("Carte deplacée!!!")
         except KeyError:
             print("Le nom de la liste entré n'existe pas!!!")
     else:
@@ -169,6 +174,17 @@ def effacer_tout():
         print("Annulation d'effacement du dictionnaire des données. Retour au menu...")
 
 
+def sauvegarder():
+    nom_fichier = input("Entrez le nom de fichier de sauvegarde : ")
+    json_data = json.dumps(category_dict)
+    parsed = json.loads(json_data)
+
+    fichier = open(f"{nom_fichier}.json", "w")
+    fichier.write(json.dumps(parsed, indent=4, sort_keys=True))
+    fichier.close()
+
+
+# Variables de tests
 todo_list = ["Tache2", "Tache3", "Tache4"]
 inprogress_list = ["Tache1", "Tache5"]
 done_list = ["Tache0", "Tache6"]
@@ -207,6 +223,9 @@ while True:
 
     elif input_menu[0] == "X":
         effacer_tout()
+
+    elif input_menu[0] == "I":
+        sauvegarder()
 
     elif input_menu[0] == "Q":
         break
