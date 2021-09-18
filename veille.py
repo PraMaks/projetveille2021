@@ -1,4 +1,5 @@
 import json
+import os
 
 
 def afficher_menu():
@@ -167,6 +168,7 @@ def deplacer_carte_dans_autre_liste():
 
 def effacer_tout():
     choix = input("Êtes-vous certain de tout effacer(O/N): ")
+    choix = choix.upper()
     if choix == "O":
         category_dict.clear()
         print("Tout est effacé...")
@@ -176,12 +178,23 @@ def effacer_tout():
 
 def sauvegarder():
     nom_fichier = input("Entrez le nom de fichier de sauvegarde : ")
-    json_data = json.dumps(category_dict)
-    parsed = json.loads(json_data)
+    dossier_sauvegarde = "saves"
+    rep_parent = "./"
+    path = os.path.join(rep_parent, dossier_sauvegarde)
 
-    fichier = open(f"{nom_fichier}.json", "w")
-    fichier.write(json.dumps(parsed, indent=4, sort_keys=True))
-    fichier.close()
+    try:
+        os.mkdir(path)
+
+    except FileExistsError:
+        pass
+
+    finally:
+        json_data = json.dumps(category_dict)
+        parsed = json.loads(json_data)
+        fichier = open(f"./{dossier_sauvegarde}/{nom_fichier}.json", "w")
+        fichier.write(json.dumps(parsed, indent=4, sort_keys=True))
+        fichier.close()
+        print(f"Le fichier est sauvegardé dans le dossier ./{dossier_sauvegarde}/{nom_fichier}.json")
 
 
 # Variables de tests
