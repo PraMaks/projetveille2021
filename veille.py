@@ -1,6 +1,6 @@
 import json
 import os
-
+from os import walk
 
 def afficher_menu():
     print("A: Ajouter une nouvelle carte")
@@ -13,6 +13,7 @@ def afficher_menu():
     print("F: Déplacer une carte dans une autre liste")
     print("X: Supprimer toutes les listes et cartes")
     print("I: Sauvegarder les cartes")
+    print("O: Cherger un fichier de sauvegarde")
     print("Q: Quitter l'application")
 
 
@@ -26,7 +27,7 @@ def afficher_listes():
 def afficher_listes_dictionnaire():
     if category_dict:
         afficher_listes()
-        input_menu_read = input("Quel liste voulez vous afficher? ")
+        input_menu_read = input("Entrez le nom de la liste à afficher:  ")
         afficher_contenu_liste(input_menu_read)
     else:
         print("Il n'y a pas de listes")
@@ -197,13 +198,45 @@ def sauvegarder():
         print(f"Le fichier est sauvegardé dans le dossier ./{dossier_sauvegarde}/{nom_fichier}.json")
 
 
+def charger_json():
+    dossier_sauvegarde = "saves"
+    json_extension = ".json"
+    # Source de la ligne du bas: https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
+    fichiers_initiales = next(walk(f"./{dossier_sauvegarde}/"), (None, None, []))[2]
+    fichiers_json = []
+
+
+    for fichier in fichiers_initiales:
+        if fichier.endswith(json_extension):
+            fichiers_json.append(fichier)
+
+    print("Voici la liste des fichiers de sauvegarde: ")
+    for fichier in fichiers_json:
+        print(f"    - {fichier}")
+
+    fichier_a_charger = input("Entrez le nom du fichier de sauvegarde que vous voulez charger (avec .json): ")
+
+    if not fichier_a_charger.endswith(json_extension):
+        print("Ceci n'est pas un fichier de sauvegarde. Retour au menu...")
+
+    else:
+        try:
+            with open(f"./{dossier_sauvegarde}/{fichier_a_charger}") as json_file:
+                data_chargee = json.load(json_file)
+                print("Le fichier a été chargé!")
+                return data_chargee
+
+        except FileNotFoundError:
+            print("Le fichier n'a pas été trouvé!")
+
+
 # Variables de tests
 todo_list = ["Tache2", "Tache3", "Tache4"]
 inprogress_list = ["Tache1", "Tache5"]
 done_list = ["Tache0", "Tache6"]
 category_dict = {"TODO": todo_list, "INPROGRESS": inprogress_list, "DONE": done_list}
 
-print("Lancement de l'application...")
+# Lancement de l'application
 while True:
     afficher_menu()
 
@@ -240,11 +273,14 @@ while True:
     elif input_menu[0] == "I":
         sauvegarder()
 
+    elif input_menu[0] == "O":
+        category_dict = charger_json()
+
     elif input_menu[0] == "Q":
         break
 
     else:
-        print("Choix invalide! Réesayez")
+        print("Choix invalide! Réessayez!")
     print()
 
 print("Fermeture de l'application...")
