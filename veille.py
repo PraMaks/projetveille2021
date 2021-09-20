@@ -13,7 +13,8 @@ def afficher_menu():
     print("F: Déplacer une carte dans une autre liste")
     print("X: Supprimer toutes les listes et cartes")
     print("I: Sauvegarder les cartes")
-    print("O: Cherger un fichier de sauvegarde")
+    print("O: Charger un fichier de sauvegarde")
+    print("P: Effacer un fichier de sauvegarde")
     print("Q: Quitter l'application")
 
 
@@ -205,7 +206,6 @@ def charger_json():
     fichiers_initiales = next(walk(f"./{dossier_sauvegarde}/"), (None, None, []))[2]
     fichiers_json = []
 
-
     for fichier in fichiers_initiales:
         if fichier.endswith(json_extension):
             fichiers_json.append(fichier)
@@ -228,6 +228,33 @@ def charger_json():
 
         except FileNotFoundError:
             print("Le fichier n'a pas été trouvé!")
+
+
+def effacer_savegarde():
+    dossier_sauvegarde = "saves"
+    json_extension = ".json"
+    fichiers_initiales = next(walk(f"./{dossier_sauvegarde}/"), (None, None, []))[2]
+    fichiers_json = []
+
+    for fichier in fichiers_initiales:
+        if fichier.endswith(json_extension):
+            fichiers_json.append(fichier)
+
+    print("Voici la liste des fichiers de sauvegarde: ")
+    for fichier in fichiers_json:
+        print(f"    - {fichier}")
+
+    fichier_a_effacer = input("Entrez le nom du fichier de sauvegarde que vous voulez effacer (avec .json): ")
+
+    if not fichier_a_effacer.endswith(json_extension):
+        print("Ceci n'est pas un fichier de sauvegarde. Retour au menu...")
+
+    else:
+        if os.path.exists(f"./{dossier_sauvegarde}/{fichier_a_effacer}"):
+            os.remove(f"./{dossier_sauvegarde}/{fichier_a_effacer}")
+            print("Le fichier est effacé")
+        else:
+            print("Le fichier n'existe pas")
 
 
 # Variables de tests
@@ -275,6 +302,9 @@ while True:
 
     elif input_menu[0] == "O":
         category_dict = charger_json()
+
+    elif input_menu[0] == "P":
+        effacer_savegarde()
 
     elif input_menu[0] == "Q":
         break
