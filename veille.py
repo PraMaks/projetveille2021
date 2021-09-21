@@ -1,6 +1,8 @@
 import json
 import os
 from os import walk
+import tkinter as tk
+from tkinter import *
 
 def afficher_menu():
     print("A: Ajouter une nouvelle carte")
@@ -263,7 +265,38 @@ inprogress_list = ["Tache1", "Tache5"]
 done_list = ["Tache0", "Tache6"]
 category_dict = {"TODO": todo_list, "INPROGRESS": inprogress_list, "DONE": done_list}
 
+"""
+#tkinter
+window = tk.Tk()
+window.title("Trello en Python")
+window.geometry("900x900")
+window.resizable(False, False)
+
+# canvas = tk.Canvas(window, height=800, width=800, bg="black")
+# canvas.pack()
+
+# frame = tk.Frame(window, bg="white")
+# frame.place(relwidth=0.80, relheight=0.80, relx=0.1, rely=0.1)
+
+titre_label = Label(window, text="Trello en Python", bg="black", fg="blue", font="none 50 bold")
+titre_label.grid(row=1, column=1, padx=180, pady=25)
+
+infos_commandes_label = Label(window, text="Entrez les commandes ici: ", bg="black", fg="white", font="none 30 bold")
+infos_commandes_label.grid(row=2, column=1, padx=40, pady=10)
+window.configure(background="black")
+
+command_entry = Entry(window, width=50, bg="white")
+command_entry.grid(row=3, column=1, padx=10, pady=10)
+
+# Button(window, text="SOUMETTRE", width=6, command=).grid(row=3, column=3)
+button_soumettre = Button(window, text="SOUMETTRE", height=4, width=20)
+button_soumettre['font'] = tk.font.Font(size=20)
+button_soumettre.grid(row=4, column=1, padx=10, pady=10)
+
 # Lancement de l'application
+window.mainloop()
+"""
+
 while True:
     afficher_menu()
 
