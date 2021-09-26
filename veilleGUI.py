@@ -100,20 +100,17 @@ def ouvrir_fenetre_aide():
         messagebox.showinfo("Error", "Erreur! Arrêtez d'ouvrir trop de fenêtres!")
 
 
-
-
-
 # Variables de tests
 todo_list = ["Tache2", "Tache3", "Tache4"]
 inprogress_list = ["Tache1", "Tache5"]
 done_list = ["Tache0", "Tache6"]
 category_dict = {"TODO": todo_list, "INPROGRESS": inprogress_list, "DONE": done_list}
 
+# Variables globales
 counter_fenetres = 0
 MAXIMUM_FENETRES = 4
 bg_help = None
 font_bouton = None
 
+#Lancement de l'application
 ouvrir_fenetre_principale()
-
-
