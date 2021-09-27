@@ -4,6 +4,7 @@ from os import walk
 import tkinter as tk
 from tkinter import *
 
+
 def afficher_menu():
     print("A: Ajouter une nouvelle carte")
     print("N: Ajouter une nouvelle catégorie de cartes")
