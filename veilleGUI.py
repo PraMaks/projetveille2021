@@ -13,6 +13,7 @@ def open_main_window():
     def submit():
         entered_text = command_line.get()
         print(entered_text)
+        response_label['text'] = entered_text
 
     window = tk.Tk()
     window.title("Trello en Python GUI")
@@ -52,6 +53,10 @@ def open_main_window():
     submit_button = Button(main_canvas, text='Soumettre', bg='#0047AB', fg='#ffffff', borderwidth=0, command=submit)
     submit_button['font'] = font_bouton
     submit_button.place(x=150, y=100, width=448, height=30)
+
+    # ------------------------ #
+    response_label = Label(main_canvas, text="↓ Entrez une commande ↓", bg='#338BA8', fg='#C0C0C0', font="none 25 bold")
+    response_label.place(x=130, y=130)
 
     # ------------------------ #
     exit_button = Button(window, text='Quitter', bg='#cc1400', fg='#ffffff', borderwidth=0, command=window.quit)
