@@ -175,6 +175,17 @@ def open_main_window():
         else:
             response_label['text'] = "Il n'y a pas de listes"
 
+    def update_category_name(old_name, new_name):
+        global category_dict
+        if category_dict:
+            try:
+                category_dict[new_name] = category_dict.pop(old_name)
+                response_label['text'] = f"Nom modifiée par {new_name}!"
+            except KeyError:
+                response_label['text'] = f"La liste '{old_name}' n'existe pas!"
+        else:
+            response_label['text'] = "Il n'y a pas de listes!"
+
     def submit():
         global category_dict
         entered_text = command_line.get()
@@ -222,7 +233,7 @@ def open_main_window():
             if length == 2:
                 add_new_category(add)
 
-            if length == 4:
+            elif length == 4:
                 list = entered_text.split(' ')[3]
                 add_card_to_category(add, list)
 
@@ -232,8 +243,13 @@ def open_main_window():
             if length == 6:
                 update_number = entered_text.split(' ')[1]
                 update_text = entered_text.split(' ')[3]
-                update_list = entered_text.split (' ')[5]
+                update_list = entered_text.split(' ')[5]
                 update_card_in_category(update_number, update_list, update_text)
+
+            elif length == 4:
+                old_name = entered_text.split(' ')[1]
+                new_name = entered_text.split(' ')[3]
+                update_category_name(old_name, new_name)
 
         elif entered_text.startswith("Reinitialiser"):
             delete_all()
