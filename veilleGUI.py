@@ -142,6 +142,39 @@ def open_main_window():
         category_dict.clear()
         response_label['text'] = "Tout a été effacé..."
 
+    def add_new_category(category):
+        global category_dict
+        category_dict[category] = []
+        response_label['text'] = f"La categorie {category} est ajoutée!"
+
+    def add_card_to_category(card, list):
+        global category_dict
+        if category_dict:
+            try:
+                category_dict[list].append(card)
+                response_label['text'] = f"Carte {card} est ajoutée dans {list}!"
+            except KeyError:
+                response_label['text'] = "Clé invalide!"
+        else:
+            response_label['text'] = "Il n'y a pas de listes"
+
+    def update_card_in_category(card_number, list, card_text):
+        global category_dict
+        if category_dict:
+            try:
+                card_int = int(card_number)
+                try:
+                    category_dict[list][card_int] = card_text
+                    response_label['text'] = f"Carte numéro {card_int} modifiée!"
+
+                except IndexError:
+                    response_label['text'] = "Erreur! Retour au menu..."
+
+            except ValueError:
+                response_label['text'] = "Cela n'est pas un nombre"
+        else:
+            response_label['text'] = "Il n'y a pas de listes"
+
     def submit():
         global category_dict
         entered_text = command_line.get()
@@ -181,6 +214,26 @@ def open_main_window():
 
             else:
                 look_one_category(look)
+
+        elif entered_text.startswith("Ajouter"):
+            length = len(entered_text.split(' '))
+            add = entered_text.split(' ')[1]
+
+            if length == 2:
+                add_new_category(add)
+
+            if length == 4:
+                list = entered_text.split(' ')[3]
+                add_card_to_category(add, list)
+
+        elif entered_text.startswith("Modifier"):
+            length = len(entered_text.split(' '))
+
+            if length == 6:
+                update_number = entered_text.split(' ')[1]
+                update_text = entered_text.split(' ')[3]
+                update_list = entered_text.split (' ')[5]
+                update_card_in_category(update_number, update_list, update_text)
 
         elif entered_text.startswith("Reinitialiser"):
             delete_all()
