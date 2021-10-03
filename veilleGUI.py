@@ -76,6 +76,40 @@ def open_main_window():
             else:
                 print("Le fichier n'existe pas")
 
+    def voir_fichiers():
+        dossier_sauvegarde = "saves"
+        json_extension = ".json"
+        fichiers_initiales = next(walk(f"./{dossier_sauvegarde}/"), (None, None, []))[2]
+        fichiers_json = []
+
+        for fichier in fichiers_initiales:
+            if fichier.endswith(json_extension):
+                fichiers_json.append(fichier)
+
+        response_label['text'] = "Voici les fichiers de sauvegarde: "
+        for fichier in fichiers_json:
+            response_label['text'] = response_label['text'] + f"\n - {fichier}"
+
+    def voir_categories():
+        global category_dict
+        response_label['text'] = "Voici la liste des categories de cartes\n disponibles: "
+        for key in category_dict:
+            response_label['text'] = response_label['text'] + f"\n- {key}"
+
+    def voir_une_categorie(categorie):
+        global category_dict
+        try:
+            if category_dict[categorie]:
+                counter = 0
+                response_label['text'] = f"La liste '{categorie}' contient:"
+                for story in category_dict[categorie]:
+                    response_label['text'] = response_label['text'] + f"\n- {story} ({counter})"
+                    counter += 1
+            else:
+                response_label['text'] = f"La liste {categorie} est vide!"
+        except KeyError:
+            response_label['text'] = f"La liste '{categorie}' est invalide!"
+
     def submit():
         global category_dict
         entered_text = command_line.get()
@@ -96,6 +130,17 @@ def open_main_window():
                 effacer_savegarde(delete)
                 response_label['text'] = f"Le fichier {delete} a été effacé"
 
+        elif entered_text.startswith("Voir"):
+            look = entered_text.split(' ')[1]
+
+            if look == "fichiers":
+                voir_fichiers()
+
+            elif look == "categories":
+                voir_categories()
+
+            else:
+                voir_une_categorie(look)
 
     window = tk.Tk()
     window.title("Trello en Python GUI")
@@ -138,7 +183,7 @@ def open_main_window():
 
     # ------------------------ #
     response_label = Label(main_canvas, text="", bg='#338BA8', fg='#C0C0C0', font="none 22 bold")
-    response_label.place(x=110, y=130)
+    response_label.place(x=130, y=130)
 
     # ------------------------ #
     exit_button = Button(window, text='Quitter', bg='#cc1400', fg='#ffffff', borderwidth=0, command=window.quit)
