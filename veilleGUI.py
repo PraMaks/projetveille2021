@@ -14,10 +14,10 @@ def open_main_window():
     global font_bouton
     global category_dict
 
-    def sauvegarder(nom_fichier):
-        dossier_sauvegarde = "saves"
+    def save_json(filename):
+        repo_save = "saves"
         rep_parent = "./"
-        path = os.path.join(rep_parent, dossier_sauvegarde)
+        path = os.path.join(rep_parent, repo_save)
 
         try:
             os.mkdir(path)
@@ -28,55 +28,54 @@ def open_main_window():
         finally:
             json_data = json.dumps(category_dict)
             parsed = json.loads(json_data)
-            fichier = open(f"./{dossier_sauvegarde}/{nom_fichier}.json", "w")
-            fichier.write(json.dumps(parsed, indent=4, sort_keys=True))
-            fichier.close()
+            file = open(f"./{repo_save}/{filename}.json", "w")
+            file.write(json.dumps(parsed, indent=4, sort_keys=True))
+            file.close()
 
-    def charger_json(fichier_a_charger):
-        dossier_sauvegarde = "saves"
+    def load_json(filename):
+        repo_save = "saves"
         json_extension = ".json"
 
-        fichiers_initiales = next(walk(f"./{dossier_sauvegarde}/"), (None, None, []))[2]
-        fichiers_json = []
+        all_files = next(walk(f"./{repo_save}/"), (None, None, []))[2]
+        files_json = []
 
-        for fichier in fichiers_initiales:
-            if fichier.endswith(json_extension):
-                fichiers_json.append(fichier)
+        for file in all_files:
+            if file.endswith(json_extension):
+                files_json.append(file)
 
-        if not fichier_a_charger.endswith(json_extension):
+        if not filename.endswith(json_extension):
             response_label['text'] = "Ceci n'est pas un fichier de sauvegarde."
 
         else:
             try:
-                with open(f"./{dossier_sauvegarde}/{fichier_a_charger}") as json_file:
-                    data_chargee = json.load(json_file)
-                    response_label['text'] = f"Le fichier {fichier_a_charger}.json a été chargé!"
-                    return data_chargee
+                with open(f"./{repo_save}/{filename}") as json_file:
+                    data_loaded = json.load(json_file)
+                    response_label['text'] = f"Le fichier {filename}.json a été chargé!"
+                    return data_loaded
 
             except FileNotFoundError:
                 print("Le fichier n'a pas été trouvé!")
 
-    def effacer_savegarde(fichier_a_effacer):
+    def delete_save(filename):
         dossier_sauvegarde = "saves"
         json_extension = ".json"
         fichiers_initiales = next(walk(f"./{dossier_sauvegarde}/"), (None, None, []))[2]
-        fichiers_json = []
+        files_json = []
 
-        for fichier in fichiers_initiales:
-            if fichier.endswith(json_extension):
-                fichiers_json.append(fichier)
+        for file in fichiers_initiales:
+            if file.endswith(json_extension):
+                files_json.append(file)
 
-        if not fichier_a_effacer.endswith(json_extension):
-            print("Ceci n'est pas un fichier de sauvegarde. Retour au menu...")
+        if not filename.endswith(json_extension):
+            print("Ceci n'est pas un fichier de sauvegarde.")
 
         else:
-            if os.path.exists(f"./{dossier_sauvegarde}/{fichier_a_effacer}"):
-                os.remove(f"./{dossier_sauvegarde}/{fichier_a_effacer}")
-                print("Le fichier est effacé")
+            if os.path.exists(f"./{dossier_sauvegarde}/{filename}"):
+                os.remove(f"./{dossier_sauvegarde}/{filename}")
             else:
                 print("Le fichier n'existe pas")
 
-    def supprimer_categorie(liste_a_supprimer):
+    def delete_category(liste_a_supprimer):
         global category_dict
         if category_dict:
             try:
@@ -87,28 +86,27 @@ def open_main_window():
         else:
             response_label['text'] = "Il n'y a pas de listes"
 
-    def supprimer_carte_dans_liste(carte, liste):
+    def delete_card_in_list(card, list):
         global category_dict
         if category_dict:
-
             try:
-                carte_int = int(carte)
+                card_int = int(card)
                 try:
-                    category_dict[liste].pop(carte_int)
-                    response_label['text'] = f"Carte numéro {carte_int} a été supprimée\n dans '{liste}'!"
+                    category_dict[list].pop(card_int)
+                    response_label['text'] = f"Carte numéro {card_int} a été supprimée\n dans '{list}'!"
 
                 except IndexError:
                     response_label['text'] = "Erreur! Ce numéro de carte n'existe pas!"
 
             except ValueError:
-                response_label['text'] = f"Cela '{carte}' n'est pas un nombre"
+                response_label['text'] = f"Cela '{card}' n'est pas un nombre"
         else:
             response_label['text'] = "Il n'y a pas de listes"
 
-    def voir_fichiers():
-        dossier_sauvegarde = "saves"
+    def look_files():
+        repo_save = "saves"
         json_extension = ".json"
-        fichiers_initiales = next(walk(f"./{dossier_sauvegarde}/"), (None, None, []))[2]
+        fichiers_initiales = next(walk(f"./{repo_save}/"), (None, None, []))[2]
         fichiers_json = []
 
         for fichier in fichiers_initiales:
@@ -116,28 +114,33 @@ def open_main_window():
                 fichiers_json.append(fichier)
 
         response_label['text'] = "Voici les fichiers de sauvegarde: "
-        for fichier in fichiers_json:
-            response_label['text'] = response_label['text'] + f"\n - {fichier}"
+        for file in fichiers_json:
+            response_label['text'] = response_label['text'] + f"\n - {file}"
 
-    def voir_categories():
+    def look_categories():
         global category_dict
         response_label['text'] = "Voici la liste des categories de cartes\n disponibles: "
         for key in category_dict:
             response_label['text'] = response_label['text'] + f"\n- {key}"
 
-    def voir_une_categorie(categorie):
+    def look_one_category(category):
         global category_dict
         try:
-            if category_dict[categorie]:
+            if category_dict[category]:
                 counter = 0
-                response_label['text'] = f"La liste '{categorie}' contient:"
-                for story in category_dict[categorie]:
+                response_label['text'] = f"La liste '{category}' contient:"
+                for story in category_dict[category]:
                     response_label['text'] = response_label['text'] + f"\n- {story} ({counter})"
                     counter += 1
             else:
-                response_label['text'] = f"La liste {categorie} est vide!"
+                response_label['text'] = f"La liste {category} est vide!"
         except KeyError:
-            response_label['text'] = f"La liste '{categorie}' est invalide!"
+            response_label['text'] = f"La liste '{category}' est invalide!"
+
+    def delete_all():
+        global category_dict
+        category_dict.clear()
+        response_label['text'] = "Tout a été effacé..."
 
     def submit():
         global category_dict
@@ -145,39 +148,42 @@ def open_main_window():
 
         if entered_text.startswith("Sauvegarder"):
             save = entered_text.split(' ')[1]
-            sauvegarder(save)
+            save_json(save)
             response_label['text'] = f"Le fichier {save}.json a été sauvegardé!"
 
         elif entered_text.startswith("Charger"):
             load = entered_text.split(' ')[1]
-            category_dict = charger_json(load)
+            category_dict = load_json(load)
 
         elif entered_text.startswith("Supprimer"):
             length = len(entered_text.split(' '))
             delete = entered_text.split(' ')[1]
 
             if length == 4:
-                liste = entered_text.split(' ')[3]
-                supprimer_carte_dans_liste(delete, liste)
+                list = entered_text.split(' ')[3]
+                delete_card_in_list(delete, list)
 
             elif delete.endswith(".json"):
-                effacer_savegarde(delete)
+                delete_save(delete)
                 response_label['text'] = f"Le fichier {delete} a été effacé!"
 
             else:
-                supprimer_categorie(delete)
+                delete_category(delete)
 
         elif entered_text.startswith("Voir"):
             look = entered_text.split(' ')[1]
 
             if look == "fichiers":
-                voir_fichiers()
+                look_files()
 
             elif look == "categories":
-                voir_categories()
+                look_categories()
 
             else:
-                voir_une_categorie(look)
+                look_one_category(look)
+
+        elif entered_text.startswith("Reinitialiser"):
+            delete_all()
 
     window = tk.Tk()
     window.title("Trello en Python GUI")
