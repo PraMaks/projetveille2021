@@ -7,32 +7,77 @@ from os import walk
 import json
 
 
-def sauvegarder(nom_fichier):
-    dossier_sauvegarde = "saves"
-    rep_parent = "./"
-    path = os.path.join(rep_parent, dossier_sauvegarde)
-
-    try:
-        os.mkdir(path)
-
-    except FileExistsError:
-        pass
-
-    finally:
-        json_data = json.dumps(category_dict)
-        parsed = json.loads(json_data)
-        fichier = open(f"./{dossier_sauvegarde}/{nom_fichier}.json", "w")
-        fichier.write(json.dumps(parsed, indent=4, sort_keys=True))
-        fichier.close()
-
-
 def open_main_window():
     global counter_window
     global MAXIMUM_WINDOWS
     global bg_help
     global font_bouton
+    global category_dict
+
+    def sauvegarder(nom_fichier):
+        dossier_sauvegarde = "saves"
+        rep_parent = "./"
+        path = os.path.join(rep_parent, dossier_sauvegarde)
+
+        try:
+            os.mkdir(path)
+
+        except FileExistsError:
+            pass
+
+        finally:
+            json_data = json.dumps(category_dict)
+            parsed = json.loads(json_data)
+            fichier = open(f"./{dossier_sauvegarde}/{nom_fichier}.json", "w")
+            fichier.write(json.dumps(parsed, indent=4, sort_keys=True))
+            fichier.close()
+
+    def charger_json(fichier_a_charger):
+        dossier_sauvegarde = "saves"
+        json_extension = ".json"
+
+        fichiers_initiales = next(walk(f"./{dossier_sauvegarde}/"), (None, None, []))[2]
+        fichiers_json = []
+
+        for fichier in fichiers_initiales:
+            if fichier.endswith(json_extension):
+                fichiers_json.append(fichier)
+
+        if not fichier_a_charger.endswith(json_extension):
+            response_label['text'] = "Ceci n'est pas un fichier de sauvegarde."
+
+        else:
+            try:
+                with open(f"./{dossier_sauvegarde}/{fichier_a_charger}") as json_file:
+                    data_chargee = json.load(json_file)
+                    response_label['text'] = f"Le fichier {fichier_a_charger}.json a été chargé!"
+                    return data_chargee
+
+            except FileNotFoundError:
+                print("Le fichier n'a pas été trouvé!")
+
+    def effacer_savegarde(fichier_a_effacer):
+        dossier_sauvegarde = "saves"
+        json_extension = ".json"
+        fichiers_initiales = next(walk(f"./{dossier_sauvegarde}/"), (None, None, []))[2]
+        fichiers_json = []
+
+        for fichier in fichiers_initiales:
+            if fichier.endswith(json_extension):
+                fichiers_json.append(fichier)
+
+        if not fichier_a_effacer.endswith(json_extension):
+            print("Ceci n'est pas un fichier de sauvegarde. Retour au menu...")
+
+        else:
+            if os.path.exists(f"./{dossier_sauvegarde}/{fichier_a_effacer}"):
+                os.remove(f"./{dossier_sauvegarde}/{fichier_a_effacer}")
+                print("Le fichier est effacé")
+            else:
+                print("Le fichier n'existe pas")
 
     def submit():
+        global category_dict
         entered_text = command_line.get()
 
         if entered_text.startswith("Sauvegarder"):
@@ -40,8 +85,16 @@ def open_main_window():
             sauvegarder(save)
             response_label['text'] = f"Le fichier {save}.json a été sauvegardé"
 
-        elif entered_text == "S":
-            supprimer_story_dans_liste()
+        elif entered_text.startswith("Charger"):
+            load = entered_text.split(' ')[1]
+            category_dict = charger_json(load)
+
+        elif entered_text.startswith("Supprimer"):
+            delete = entered_text.split(' ')[1]
+
+            if delete.endswith(".json"):
+                effacer_savegarde(delete)
+                response_label['text'] = f"Le fichier {delete} a été effacé"
 
 
     window = tk.Tk()
@@ -84,8 +137,8 @@ def open_main_window():
     submit_button.place(x=150, y=100, width=448, height=30)
 
     # ------------------------ #
-    response_label = Label(main_canvas, text="↓ Entrez une commande ↓", bg='#338BA8', fg='#C0C0C0', font="none 25 bold")
-    response_label.place(x=130, y=130)
+    response_label = Label(main_canvas, text="", bg='#338BA8', fg='#C0C0C0', font="none 22 bold")
+    response_label.place(x=110, y=130)
 
     # ------------------------ #
     exit_button = Button(window, text='Quitter', bg='#cc1400', fg='#ffffff', borderwidth=0, command=window.quit)
