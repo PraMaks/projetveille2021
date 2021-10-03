@@ -76,6 +76,35 @@ def open_main_window():
             else:
                 print("Le fichier n'existe pas")
 
+    def supprimer_categorie(liste_a_supprimer):
+        global category_dict
+        if category_dict:
+            try:
+                category_dict.pop(liste_a_supprimer)
+                response_label['text'] = f"Liste '{liste_a_supprimer}' est supprimée!!!"
+            except KeyError:
+                response_label['text'] = f"Liste '{liste_a_supprimer}' n'existe pas!!!"
+        else:
+            response_label['text'] = "Il n'y a pas de listes"
+
+    def supprimer_carte_dans_liste(carte, liste):
+        global category_dict
+        if category_dict:
+
+            try:
+                carte_int = int(carte)
+                try:
+                    category_dict[liste].pop(carte_int)
+                    response_label['text'] = f"Carte numéro {carte_int} a été supprimée\n dans '{liste}'!"
+
+                except IndexError:
+                    response_label['text'] = "Erreur! Ce numéro de carte n'existe pas!"
+
+            except ValueError:
+                response_label['text'] = f"Cela '{carte}' n'est pas un nombre"
+        else:
+            response_label['text'] = "Il n'y a pas de listes"
+
     def voir_fichiers():
         dossier_sauvegarde = "saves"
         json_extension = ".json"
@@ -117,18 +146,26 @@ def open_main_window():
         if entered_text.startswith("Sauvegarder"):
             save = entered_text.split(' ')[1]
             sauvegarder(save)
-            response_label['text'] = f"Le fichier {save}.json a été sauvegardé"
+            response_label['text'] = f"Le fichier {save}.json a été sauvegardé!"
 
         elif entered_text.startswith("Charger"):
             load = entered_text.split(' ')[1]
             category_dict = charger_json(load)
 
         elif entered_text.startswith("Supprimer"):
+            length = len(entered_text.split(' '))
             delete = entered_text.split(' ')[1]
 
-            if delete.endswith(".json"):
+            if length == 4:
+                liste = entered_text.split(' ')[3]
+                supprimer_carte_dans_liste(delete, liste)
+
+            elif delete.endswith(".json"):
                 effacer_savegarde(delete)
-                response_label['text'] = f"Le fichier {delete} a été effacé"
+                response_label['text'] = f"Le fichier {delete} a été effacé!"
+
+            else:
+                supprimer_categorie(delete)
 
         elif entered_text.startswith("Voir"):
             look = entered_text.split(' ')[1]
