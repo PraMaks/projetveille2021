@@ -186,6 +186,17 @@ def open_main_window():
         else:
             response_label['text'] = "Il n'y a pas de listes!"
 
+    def move_card_to_another_list(card_number, from_list, to_list):
+        global category_dict
+        if category_dict:
+            try:
+                category_dict[to_list].append(category_dict[from_list].pop(int(card_number)))
+                response_label['text'] = f"Carte numero {card_number} deplacée dans \n {to_list}!"
+            except KeyError:
+                response_label['text'] = "Le nom de la liste entré n'existe pas!"
+        else:
+            response_label['text'] = "Il n'y a pas de listes!"
+
     def submit():
         global category_dict
         entered_text = command_line.get()
@@ -251,8 +262,20 @@ def open_main_window():
                 new_name = entered_text.split(' ')[3]
                 update_category_name(old_name, new_name)
 
+        elif entered_text.startswith("Deplacer"):
+            length = len(entered_text.split(' '))
+
+            if length == 6:
+                card_number = entered_text.split(' ')[1]
+                from_list = entered_text.split(' ')[3]
+                to_list = entered_text.split(' ')[5]
+                move_card_to_another_list(card_number, from_list, to_list)
+
         elif entered_text.startswith("Reinitialiser"):
             delete_all()
+
+        else:
+            response_label['text'] = "Commande invalide!"
 
     window = tk.Tk()
     window.title("Trello en Python GUI")
