@@ -2,6 +2,28 @@ import tkinter as tk
 from tkinter import *
 import tkinter.font as font
 from tkinter import messagebox
+import os
+from os import walk
+import json
+
+
+def sauvegarder(nom_fichier):
+    dossier_sauvegarde = "saves"
+    rep_parent = "./"
+    path = os.path.join(rep_parent, dossier_sauvegarde)
+
+    try:
+        os.mkdir(path)
+
+    except FileExistsError:
+        pass
+
+    finally:
+        json_data = json.dumps(category_dict)
+        parsed = json.loads(json_data)
+        fichier = open(f"./{dossier_sauvegarde}/{nom_fichier}.json", "w")
+        fichier.write(json.dumps(parsed, indent=4, sort_keys=True))
+        fichier.close()
 
 
 def open_main_window():
@@ -12,8 +34,15 @@ def open_main_window():
 
     def submit():
         entered_text = command_line.get()
-        print(entered_text)
-        response_label['text'] = entered_text
+
+        if entered_text.startswith("Sauvegarder"):
+            save = entered_text.split(' ')[1]
+            sauvegarder(save)
+            response_label['text'] = f"Le fichier {save}.json a été sauvegardé"
+
+        elif entered_text == "S":
+            supprimer_story_dans_liste()
+
 
     window = tk.Tk()
     window.title("Trello en Python GUI")
